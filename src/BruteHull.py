@@ -11,6 +11,7 @@ class BruteHull:
         self.set_of_points = set_of_points
 
     def compute_hull(self):
+        # Storing results as directed pairs as no guaranteed ordering of points
         ext_pairs = set()
         for i in range(0, len(self.set_of_points)):
             p1 = self.set_of_points[i]
@@ -20,8 +21,11 @@ class BruteHull:
                 b = p1[X_POS] - p2[X_POS]  # This may be the wrong order
                 c = p1[X_POS] * p2[Y_POS] \
                     - p1[Y_POS] * p2[X_POS]
+
+                # Booleans to determine if all points are on the same side
                 all_positive = True
                 all_negative = True
+
                 same_line = []
                 for k in range(0, len(self.set_of_points)):
                     # Short circuit if both are false
@@ -39,6 +43,7 @@ class BruteHull:
 
                 if all_positive ^ all_negative:
                     if len(same_line) > 2:
+                        # Two points at far ends of the sorted same_line
                         pair_1, pair_2 = self.__get_furthest_pair(same_line)
                         ext_pairs.add((pair_1, pair_2))
                     else:
@@ -47,5 +52,7 @@ class BruteHull:
 
     @staticmethod
     def __get_furthest_pair(same_line):
+        # Sorts the points in the same line in n log n
+        # Couldn't think of a good variable name
         foo = sorted(same_line, key=lambda point: point)
         return foo[0], foo[-1]

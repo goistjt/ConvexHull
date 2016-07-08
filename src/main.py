@@ -91,10 +91,11 @@ def main():
         print("Brute Hull Computed in: {} seconds".format(time.time() - start))
         render_brute_hull(list(ext_pairs), points)
     elif algo == 'QUICK':
+        # Including the time to sort as part of runtime as it is preprocessing
         start = time.time()
-        points = sorted(points, key=lambda point: point)
         # This sorts the elements first by x, then by y (ascending)
         # From the documentation in Python implementation - "adaptive, stable, natural mergesort" -> O(n log n)
+        points = sorted(points, key=lambda point: point)
         ext_points = QuickHull(points).compute_hull()
         print("Quick Hull Computed in: {} seconds".format(time.time() - start))
         render_quick_hull(ext_points, points)
