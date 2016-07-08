@@ -23,6 +23,10 @@ def collect_points(path):
 
 def render_brute_hull(ext_pairs, int_points):
     window = GraphWin("Brute Force Convex Hull", width=1920, height=1080)
+    # drawing the Outer edge twice so it it visile to start, then doesn't get overlapped
+    for i in range(0, len(ext_pairs)):
+        p1, p2 = ext_pairs[i]
+        draw_point_line(p1, p2, window)
     for point in int_points:
         draw_point(point, window)
     for i in range(0, len(ext_pairs)):
@@ -33,9 +37,15 @@ def render_brute_hull(ext_pairs, int_points):
 
 def render_quick_hull(ext_points, int_points):
     window = GraphWin("Quick Convex Hull", width=1920, height=1080)
+    # drawing the Outer edge twice so it it visible to start, then doesn't get overlapped
     draw_point_line(ext_points[0], ext_points[-1], window)
+    for i in range(1, len(ext_points)):
+        p1 = ext_points[i - 1]
+        p2 = ext_points[i]
+        draw_point_line(p1, p2, window)
     for point in int_points:
         draw_point(point, window)
+    draw_point_line(ext_points[0], ext_points[-1], window)
     for i in range(1, len(ext_points)):
         p1 = ext_points[i-1]
         p2 = ext_points[i]
@@ -77,9 +87,9 @@ def main():
     print("Time to collect: {} seconds".format(time.time() - start))
     if algo == 'BRUTE':
         start = time.time()
-        ext_points = BruteHull(points).compute_hull()
+        ext_pairs = BruteHull(points).compute_hull()
         print("Brute Hull Computed in: {} seconds".format(time.time() - start))
-        render_brute_hull(ext_points, points)
+        render_brute_hull(list(ext_pairs), points)
     elif algo == 'QUICK':
         start = time.time()
         points = sorted(points, key=lambda point: point)
